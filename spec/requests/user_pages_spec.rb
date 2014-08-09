@@ -1,20 +1,24 @@
 require 'spec_helper'
 
 describe "UserPages" do
-=begin
-  describe "GET /user_pages" do
-    it "works! (now write some real specs)" do
-      get user_pages_index_path
-      response.status.should be(200)
-    end
+
+  subject { page }  
+
+  shared_examples_for "all user pages" do
+      it {should have_selector('h1',text:heading)}
+      it {should have_title(full_title(page_title))}
   end
-=end
-  subject { page}  
 
   describe "signup page" do
-    before { visit signup_path }
 
-    it {should have_content('Sign up')}
-    it {should have_title(full_title('Sign up'))}
+    before do
+      visit signup_path
+    end
+
+    let(:heading) {'Sign up'}
+    let(:page_title) {'Sign up'}
+
+    it_should_behave_like 'all user pages'
   end
 end
+
