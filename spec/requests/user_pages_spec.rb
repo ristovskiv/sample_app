@@ -10,6 +10,7 @@ describe "UserPages" do
   end
 
 
+
   describe "index page" do  
     let(:user){ FactoryGirl.create(:user) }
     before(:each) do
@@ -69,10 +70,20 @@ describe "UserPages" do
 
   describe "profile page" do
     let(:user){FactoryGirl.create(:user)}
-    before {visit user_path(user)}
-
+    let!(:m1){FactoryGirl.create(:micropost,user: user,content: "Foo")}
+    let!(:m2){FactoryGirl.create(:micropost,user: user,content: "Bar")}
+    before do 
+      # => sign_in user
+      visit user_path(user)
+    end
     it {should have_content(user.name)}
     it {should have_title(user.name)}
+
+      describe "micropost" do
+        it {should have_content(m1.content)}
+        it {should have_content(m2.content)}
+        it {should have_content(user.microposts.count)}
+      end
   end
 
   describe "signup" do

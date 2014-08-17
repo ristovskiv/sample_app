@@ -10,10 +10,12 @@ class UsersController < ApplicationController
 
   def show
   	@user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def new
   	@user = User.new
+    @users = User.all
   end
 
   def create
@@ -21,7 +23,7 @@ class UsersController < ApplicationController
   	if @user.save
       sign_in @user
   		flash[:success] = "Welcome to the Sample App!"
-  		redirect_to @user # same as "/users/#{@user.id]" or user_path(@user) 
+  		redirect_to @user # same as "/users/#{@user.id]" or user_path(@user)
   	else
   		render "new"
   	end
@@ -70,6 +72,6 @@ class UsersController < ApplicationController
       end
 
       def for_not_signed_in_user
-          redirect_to root_path if signed_in?
+          redirect_to root_path, notice: "Sign out first" if signed_in?
       end
 end
